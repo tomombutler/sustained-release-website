@@ -21,22 +21,9 @@ class Home extends NAILS_Controller
      *     http://example.com/
      *
      */
+
     public function index()
     {
-        /**
-         * To override the default Nails header you can create a view
-         * at `application/views/structure/header/default`.
-         *
-         * Alternatively you can set $this->data['headerOverride'] to
-         * the view you wish to load.
-         *
-         * The same rules apply to the footer, but substitute the word
-         * header with footer.
-         */
-
-        $this->data['headerOverride'] = 'structure/header/blank';
-        $this->data['footerOverride'] = 'structure/footer/blank';
-
         $this->load->view('structure/header', $this->data);
         $this->load->view('home/index', $this->data);
         $this->load->view('structure/footer', $this->data);

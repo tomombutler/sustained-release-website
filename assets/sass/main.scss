@@ -2,11 +2,12 @@
  *  Custom Sustained Release
  */
 
- @import "reset/normalize.scss";
- @import "reset/print.scss";
+@import "reset/normalize.scss";
+@import "reset/print.scss";
 
 @import "base/palette.scss";
 @import "base/variables.scss";
+@import "base/grid.scss";
 @import "base/type.scss";
 @import "base/utility.scss";
 
@@ -22,5 +23,3 @@
 @import "component/link.scss";
 @import "component/img.scss";
 @import "component/hero.scss";
-
-@import "structure/grid.scss";

@@ -1,99 +1,153 @@
 var gulp = require('gulp');
-var less = require('gulp-sass');
+var sass = require('gulp-sass');
+var concat = require('gulp-concat');
 var autoprefixer = require('gulp-autoprefixer');
-var minifyCss = require('gulp-minify-css');
+var cleanCss = require('gulp-clean-css');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 var sourcemaps = require('gulp-sourcemaps');
 var runSequence = require('run-sequence');
 var notify = require('gulp-notify');
 var path = require('path');
-var plumber = require('gulp-plumber');
-var gutil = require('gulp-util');
-var jshint = require('gulp-jshint');
-var stylish = require('jshint-stylish');
 
-//  Styles
-gulp.task('css', function() {
+// App CSS
+gulp.task('css:app', function() {
 
-    var onError = function(err) {
-        notify
-            .onError({
-                title: 'Error compiling CSS',
-                subtitle: 'Check your terminal',
-                message: '<%= error.message %>',
-                sound: 'Funk',
-                contentImage: path.join(__dirname, 'assets/img/nails/icon/icon-red@2x.png'),
-                icon: false,
-                onLast: true
-            })(err);
-
-        this.emit('end');
-    };
-
-    gulp.src(['assets/sass/*.scss'])
-        .pipe(plumber({errorHandler: onError}))
-        .pipe(less())
+    gulp
+        .src(['assets/sass/main.scss'])
+        .pipe(sass().on('error', sass.logError))
+        .pipe(concat('main.css'))
         .pipe(autoprefixer({
             browsers: ['last 2 versions', 'ie 8', 'ie 9'],
             cascade: false
         }))
-        .pipe(minifyCss())
-        .pipe(gulp.dest('./assets/css/'))
-        .pipe(notify({
-          title: 'Successfully compiled CSS',
-          message: '.less files were successfully compiled into CSS',
-          sound: false,
-          contentImage: path.join(__dirname, 'assets/img/nails/icon/icon@2x.png'),
-          icon: false,
-          onLast: true
-        }));
-});
-
-//  JS
-gulp.task('js', function() {
-
-    var onError = function(err) {
-        notify
-            .onError({
-                title: 'Error compiling JS',
-                message: 'Check your terminal',
-                sound: 'Funk',
-                contentImage: path.join(__dirname, 'assets/img/nails/icon/icon-red@2x.png'),
-                icon: false,
-                onLast: true
-            })(err);
-
-        this.emit('end');
-    };
-
-    gulp.src(['assets/js/*.js', '!assets/js/*.min.js', '!assets/js/*.min.js.map'])
-        .pipe(plumber({errorHandler: onError}))
-        .pipe(sourcemaps.init())
-        .pipe(jshint('.jshintrc'))
-        .pipe(jshint.reporter('jshint-stylish'))
-        .pipe(uglify())
+        .pipe(cleanCss())
         .pipe(rename({
             suffix: '.min'
         }))
-        .pipe(sourcemaps.write('./', {includeContent: false}))
-        .pipe(gulp.dest('./assets/js/'))
+        .pipe(gulp.dest('./assets/build/css/'))
+        .on('error', function (err) {
+            console.log('Error compiling CSS: ', err);
+        })
         .pipe(notify({
-            title: 'Successfully compiled JS',
-            message: '.js files were successfully minified and sourcemaps generated',
-            contentImage: path.join(__dirname, 'assets/img/nails/icon/icon@2x.png'),
+            title: 'Successfully compiled CSS',
+            message: 'All .scss files were successfully compiled into CSS',
+            sound: false,
+            contentImage: path.join(__dirname, 'vendor/nailsapp/module-asset/assets/img/nails/icon/icon@2x.png'),
             icon: false,
             onLast: true
         }));
 });
 
-//  Watches for changes in JS or less files and executes other tasks
+//  Admin CSS
+gulp.task('css:admin', function() {
+
+    gulp
+        .src(['assets/sass/admin.scss'])
+        .pipe(sass().on('error', sass.logError))
+        .pipe(concat('admin.css'))
+        .pipe(autoprefixer({
+            browsers: ['last 2 versions', 'ie 8', 'ie 9'],
+            cascade: false
+        }))
+        .pipe(cleanCss())
+        .pipe(rename({
+            suffix: '.min'
+        }))
+        .pipe(gulp.dest('./assets/build/css/'))
+        .on('error', function (err) {
+            console.log('Error compiling CSS: ', err);
+        })
+        .pipe(notify({
+          title: 'Successfully compiled CSS',
+          message: 'All .scss files were successfully compiled into CSS',
+          sound: false,
+          contentImage: path.join(__dirname, 'vendor/nailsapp/module-asset/assets/img/nails/icon/icon@2x.png'),
+          icon: false,
+          onLast: true
+        }));
+});
+
+// --------------------------------------------------------------------------
+
+//  App JS
+gulp.task('js:app', function() {
+    gulp
+        .src([
+            'assets/js/app.js',
+            'assets/bower_components/jquery/dist/jquery.min.js'
+        ])
+        .pipe(sourcemaps.init())
+        .pipe(concat('app.js'))
+        .pipe(uglify())
+        .pipe(rename({
+            suffix: '.min'
+        }))
+        .pipe(sourcemaps.write('.', {includeContent: false}))
+        .pipe(gulp.dest('./assets/build/js/'))
+        .on('error', notify.onError({
+            message: 'Error compiling JS',
+            title: '<%= error.message %>',
+            sound: 'Funk',
+            contentImage: path.join(__dirname, 'vendor/nailsapp/module-asset/assets/img/nails/icon/icon@2x.png'),
+            icon: false,
+            onLast: true
+        }))
+        .on('error', function (err) {
+            console.log('Error compiling JS: ', err);
+        })
+        .pipe(notify({
+            title: 'Successfully compiled JS',
+            message: 'All .js files were successfully minified and sourcemaps generated',
+            sound: false,
+            contentImage: path.join(__dirname, 'vendor/nailsapp/module-asset/assets/img/nails/icon/icon@2x.png'),
+            icon: false,
+            onLast: true
+        }));
+});
+
+//  Admin JS
+gulp.task('js:admin', function() {
+
+    gulp
+        .src(['assets/js/admin.*.js'])
+        .pipe(sourcemaps.init())
+        .pipe(uglify())
+        .pipe(rename({
+            suffix: '.min'
+        }))
+        .pipe(sourcemaps.write('.', {includeContent: false}))
+        .pipe(gulp.dest('./assets/build/js/'))
+        .on('error', notify.onError({
+            message: 'Error compiling JS',
+            title: '<%= error.message %>',
+            sound: 'Funk',
+            contentImage: path.join(__dirname, 'vendor/nailsapp/module-asset/assets/img/nails/icon/icon@2x.png'),
+            icon: false,
+            onLast: true
+        }))
+        .on('error', function (err) {
+            console.log('Error compiling JS: ', err);
+        })
+        .pipe(notify({
+            title: 'Successfully compiled JS',
+            message: 'All .js files were successfully minified and sourcemaps generated',
+            sound: false,
+            contentImage: path.join(__dirname, 'vendor/nailsapp/module-asset/assets/img/nails/icon/icon@2x.png'),
+            icon: false,
+            onLast: true
+        }));
+});
+
+// --------------------------------------------------------------------------
+
+//  Watches for changes in JS or scss files and executes other tasks
 gulp.task('default', function() {
-    gulp.watch('assets/less/**/*.less', ['css']);
-    gulp.watch(['assets/js/*.js', '!assets/js/*.min.js', '!assets/js/*.min.js.map'], ['js']);
+    gulp.watch('assets/sass/**/*.scss',['css:app', 'css:admin']);
+    gulp.watch(['assets/js/*.js'],['js:app', 'js:admin']);
 });
 
 //  Builds both CSS and JS
 gulp.task('build', function() {
-    runSequence(['css', 'js']);
+    runSequence(['css:app', 'css:admin', 'js:app', 'js:admin']);
 });

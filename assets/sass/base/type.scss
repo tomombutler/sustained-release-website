@@ -1,0 +1,61 @@
+@font-face {
+    font-family: 'Fabrik-Bold';
+    src: url('../../webfontsfabrik-bold-webfont.eot');
+    src: url('../../webfontsfabrik-bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../webfonts/fabrik-bold-webfont.woff2') format('woff2'),
+         url('../../webfonts/fabrik-bold-webfont.woff') format('woff'),
+         url('../../webfonts/fabrik-bold-webfont.ttf') format('truetype'),
+         url('../../webfonts/fabrik-bold-webfont.svg#fabrikbold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "HK-Compakt-Light";
+    src:url("../../webfonts/HKCompakt-light.eot");
+    src:url("../../webfonts/HKCompakt-light.woff") format("woff");
+    font-weight: light;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "HK-Compakt-Regular";
+    src:url("../../webfonts/HKCompakt-regular.eot");
+    src:url("../../webfonts/HKCompakt-regular.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "HK-Compakt-Bold";
+    src:url("../../webfonts/HKCompakt-bold.eot");
+    src:url("../../webfonts/HKCompakt-bold.woff") format("woff");
+    font-weight: bold;
+    font-style: normal;
+}
+
+
+html,
+body {
+    font-family: $font-light;
+    font-size: 15px;
+    color: $black;
+    font-weight: normal;
+    font-style: normal;
+    transition: font-size .2s ease;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+    margin: 0;
+}
+
+p {
+    font-weight: light;
+    line-height: 1.8;
+    margin: 0;
+}

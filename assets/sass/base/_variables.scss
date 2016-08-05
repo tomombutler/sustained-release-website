@@ -23,3 +23,10 @@ $screen-lg-min:              $screen-lg !default;
 $screen-xs-max:              ($screen-sm-min - 1) !default;
 $screen-sm-max:              ($screen-md-min - 1) !default;
 $screen-md-max:              ($screen-lg-min - 1) !default;
+
+// fonts
+
+$font-light:            "HK-Compakt-Light", Helvetica, Arial, sans-serif;
+$font-regular:          "HK-Compakt-Regular", Helvetica, Arial, sans-serif;
+$font-bold:             "HK-Compakt-Bold", Helvetica, Arial, sans-serif;
+$font-titles:           "Fabrik-Bold", Helvetica, Arial, sans-serif;
